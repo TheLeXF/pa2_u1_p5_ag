@@ -1,11 +1,19 @@
 package com.uce.edu;
 
+import java.math.BigDecimal;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.uce.edu.ioc.di.Estudiante;
+
 @SpringBootApplication
 public class Pa2U1P5AgApplication implements CommandLineRunner{
+	
+	@Autowired
+	private Estudiante estudiante;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Pa2U1P5AgApplication.class, args);
@@ -13,11 +21,10 @@ public class Pa2U1P5AgApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println("Hola Mundo");
-		System.out.println("Soy Alexis Guanoluisa");
-		System.out.println("Cambio en la misma rama");
-		System.out.println("Copia del 10/11/2023");
-		System.out.println("TALLER 4v2");
-		
+		this.estudiante.setNombre("Alexis");
+		this.estudiante.setApellido("Guanoluisa");
+		this.estudiante.setCedula("1727450296");
+		this.estudiante.setSalario(new BigDecimal(1000));
+		System.out.println(estudiante);
 	}
 }
