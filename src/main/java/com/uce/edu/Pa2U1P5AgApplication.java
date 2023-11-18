@@ -1,6 +1,7 @@
 package com.uce.edu;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -8,12 +9,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.uce.edu.ioc.di.Estudiante;
+import com.uce.edu.repository.modelo.Materia;
+import com.uce.edu.service.IMateriaService;
 
 @SpringBootApplication
-public class Pa2U1P5AgApplication implements CommandLineRunner{
-	
+public class Pa2U1P5AgApplication implements CommandLineRunner {
+
 	@Autowired
-	private Estudiante estudiante;
+	private IMateriaService iMateriaService;
+
+	@Autowired
+	private Materia materia;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Pa2U1P5AgApplication.class, args);
@@ -21,10 +27,34 @@ public class Pa2U1P5AgApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		this.estudiante.setNombre("Alexis");
-		this.estudiante.setApellido("Guanoluisa");
-		this.estudiante.setCedula("1727450296");
-		this.estudiante.setSalario(new BigDecimal(1000));
-		System.out.println(estudiante);
+		this.materia.setCodigo("M1");
+		this.materia.setNombre("P.Avanzada");
+		this.materia.setNumeroCreditos(10);
+
+		
+		
+		System.out.println("Reporte Inicio");
+		this.iMateriaService.registrar(materia);
+		List<Materia> reporte= this.iMateriaService.buscarTodos();
+		for(Materia mat: reporte) {
+			System.out.println(mat);
+		}
+		
+		System.out.println("Reporte Fin");
+
+		Materia mate = this.iMateriaService.buscar("M1");
+		System.out.println(mate);
+
+		mate.setNumeroCreditos(20);
+
+		this.iMateriaService.actualizar(mate);
+		Materia mate2 = this.iMateriaService.buscar("M1");
+		System.out.println(mate2);
+		
+		this.iMateriaService.eliminar("M1");
+		
+		mate2=this.iMateriaService.buscar("M1");
+		System.out.println(mate2);
+
 	}
 }
