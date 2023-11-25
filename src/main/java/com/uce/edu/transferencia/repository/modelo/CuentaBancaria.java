@@ -6,6 +6,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CuentaBancaria {
+	@Override
+	public String toString() {
+		return "CuentaBancaria [numero=" + numero + ", cedulaPropietario=" + cedulaPropietario + ", saldo=" + saldo
+				+ "]";
+	}
 	private String numero;
 	private String cedulaPropietario;
 	private BigDecimal saldo;

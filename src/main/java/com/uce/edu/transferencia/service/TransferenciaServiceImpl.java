@@ -1,6 +1,7 @@
 package com.uce.edu.transferencia.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,22 +43,52 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 	}
 
 	@Override
-	public void realizar(String numeroOrigen, String numeroDestinp, BigDecimal monto) {
+	public void realizar(String numeroOrigen, String numeroDestino, BigDecimal monto) {
 		// TODO Auto-generated method stub
-		//1. Buscar Cta Origen 
-		CuentaBancaria cuentaOrigen=this.iCuentaBancariaRepository.seleccionar(numeroOrigen);
-		//2. Consultar el saldo
-		//3. Validar Saldo
-		//4. Restar el monto
-		//5. Actualizar Cta Origen
+		// 1. Buscar Cta Origen
+		CuentaBancaria cuentaOrigen = this.iCuentaBancariaRepository.seleccionar(numeroOrigen);
+		// 2. Consultar el saldo
+
+		// 3. Validar Saldo
+		BigDecimal saldoOrigen = cuentaOrigen.getSaldo();
+		if (saldoOrigen.compareTo(monto) >= 0) {
+			// 4. Restar el monto
+			BigDecimal nuevoSaldoOrigen = saldoOrigen.subtract(monto);
+			// 5. Actualizar Cta Origen
+			cuentaOrigen.setSaldo(nuevoSaldoOrigen);
+			this.iCuentaBancariaRepository.actualizar(cuentaOrigen);
+			
+			// 6. Buscar Cta Destino
+			CuentaBancaria cuentaDestino = this.iCuentaBancariaRepository.seleccionar(numeroDestino);
+			// 7. Consultar Saldo
+			BigDecimal saldoDestino = cuentaDestino.getSaldo();
+			// 8. Sumar el monto
+			BigDecimal nuevoSaldoDestino = saldoDestino.add(monto);
+			// 9. Actualizar Cta Destino
+			cuentaDestino.setSaldo(nuevoSaldoDestino);
+			this.iCuentaBancariaRepository.actualizar(cuentaDestino);
+			// 10. Crear Transferencia
+			
+			Transferencia transferencia = new Transferencia();
+			transferencia.setCuentaOrigen(cuentaOrigen);
+			transferencia.setCuentaDestino(cuentaDestino);
+			transferencia.setFecha(LocalDateTime.now());
+			transferencia.setMonto(monto);
+			transferencia.setNumero("123123123");
+			
+			this.iTransferenciaRepository.insertar(transferencia);
+			System.out.println("Transferencia realizada con exito");
+			
+		} else {
+			System.out.println("Saldo No disponible");
+		}
+
 		
-		//6. Buscar Cta Destino
-		//7. Consultar Saldo
-		//8. Sumar el monto
-		//9. Actualizar Cta Destino
 		
-		//10. Crear Transferencia
 		
+
+		
+
 	}
 
 }

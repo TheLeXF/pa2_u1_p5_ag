@@ -13,7 +13,11 @@ public class Transferencia {
 	private CuentaBancaria cuentaOrigen;
 	private CuentaBancaria cuentaDestino;
 	
-	
+	@Override
+	public String toString() {
+		return "Transferencia [numero=" + numero + ", fecha=" + fecha + ", monto=" + monto + ", cuentaOrigen="
+				+ cuentaOrigen + ", cuentaDestino=" + cuentaDestino + "]";
+	}
 	public String getNumero() {
 		return numero;
 	}
