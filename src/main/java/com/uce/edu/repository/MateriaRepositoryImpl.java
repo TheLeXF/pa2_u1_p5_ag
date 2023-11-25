@@ -10,7 +10,7 @@ import com.uce.edu.repository.modelo.Materia;
 @Repository
 public class MateriaRepositoryImpl implements IMateriaRepository {
 	
-	private static List<Materia> base =new ArrayList();
+	private static List<Materia> base =new ArrayList<Materia>();
 
 	@Override
 	public Materia seleccionar(String codigo) {
