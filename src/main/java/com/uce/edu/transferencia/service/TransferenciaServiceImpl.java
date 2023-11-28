@@ -2,6 +2,7 @@ package com.uce.edu.transferencia.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,7 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 		// TODO Auto-generated method stub
 		// 1. Buscar Cta Origen
 		CuentaBancaria cuentaOrigen = this.iCuentaBancariaRepository.seleccionar(numeroOrigen);
+		System.out.println(cuentaOrigen);
 		// 2. Consultar el saldo
 
 		// 3. Validar Saldo
@@ -83,12 +85,11 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 			System.out.println("Saldo No disponible");
 		}
 
-		
-		
-		
+	}
 
-		
-
+	@Override
+	public List<Transferencia> movimientosBancarios() {
+		return this.iTransferenciaRepository.buscarTodasTransferencias();
 	}
 
 }

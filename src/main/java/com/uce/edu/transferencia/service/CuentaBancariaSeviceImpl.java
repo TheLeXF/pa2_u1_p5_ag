@@ -1,5 +1,7 @@
 package com.uce.edu.transferencia.service;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,18 @@ public class CuentaBancariaSeviceImpl implements ICuentaBancariaService {
 	public void eliminar(String numero) {
 		// TODO Auto-generated method stub
 		this.iCuentaBancariaRepository.eliminar(numero);
+	}
+
+	@Override
+	public void deposito(String numero, BigDecimal monto) {
+		
+		CuentaBancaria cuentaDeposito = this.iCuentaBancariaRepository.seleccionar(numero);
+		BigDecimal desc= new BigDecimal(0.1);
+		BigDecimal calculo=monto.multiply(desc);
+		BigDecimal montoFinal=monto.subtract(calculo);
+		this.iCuentaBancariaRepository.actualizar(cuentaDeposito);
+		cuentaDeposito.setSaldo(montoFinal);
+		
 	}
 
 }

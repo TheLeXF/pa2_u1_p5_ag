@@ -43,4 +43,9 @@ public class TransferenciaRepositoryImpl implements ITransferenciaRepository {
 
 	}
 
+	@Override
+	public List<Transferencia> buscarTodasTransferencias() {
+		return base;
+	}
+
 }

@@ -1,6 +1,7 @@
 package com.uce.edu;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -41,15 +42,27 @@ public class Pa2U1P5AgApplication implements CommandLineRunner {
 		
 
 		this.iTransferenciaService.realizar("1234","1263" , new BigDecimal(20));
-		//System.out.println(cuentaOrigen);
-		//System.out.println(cuentaDestino);
-		
 		
 		CuentaBancaria cuentaOrigen1 = this.bancariaService.buscar("1234");
 		System.out.println(cuentaOrigen1);
 		
 		CuentaBancaria cuentaDestino1= this.bancariaService.buscar("1263");
 		System.out.println(cuentaDestino1);
+		
+		this.iTransferenciaService.realizar("1234", "1263", new BigDecimal(50));
+		this.iTransferenciaService.realizar("1263", "1234", new BigDecimal(10));
+		
+		
+		//Construir un reporte del estado de cuenta de todas las transferecnias 
+		int indice=0;
+		List<Transferencia>lista=this.iTransferenciaService.movimientosBancarios();
+		for (Transferencia trans:lista) {
+			indice++;
+			System.out.println("N° Transferencia: "+indice+": "+trans.toString());	
+		}
+		
+		this.bancariaService.deposito("1234", new BigDecimal(50));
+		System.out.println(cuentaDestino);
 		
 	}
 }
