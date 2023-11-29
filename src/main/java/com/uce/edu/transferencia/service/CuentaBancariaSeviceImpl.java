@@ -41,12 +41,16 @@ public class CuentaBancariaSeviceImpl implements ICuentaBancariaService {
 	@Override
 	public void deposito(String numero, BigDecimal monto) {
 		
-		CuentaBancaria cuentaDeposito = this.iCuentaBancariaRepository.seleccionar(numero);
+		CuentaBancaria cuentaDeposito = this.buscar(numero); //uwu unu no sirve unu
 		BigDecimal desc= new BigDecimal(0.1);
 		BigDecimal calculo=monto.multiply(desc);
 		BigDecimal montoFinal=monto.subtract(calculo);
-		this.iCuentaBancariaRepository.actualizar(cuentaDeposito);
-		cuentaDeposito.setSaldo(montoFinal);
+		BigDecimal saldoInicio = cuentaDeposito.getSaldo();
+		BigDecimal nuevoSaldoDeposito = saldoInicio.add(montoFinal);
+		cuentaDeposito.setSaldo(nuevoSaldoDeposito);
+		actualizar(cuentaDeposito);
+		System.out.println("Deposito realizada con exito");
+		
 		
 	}
 

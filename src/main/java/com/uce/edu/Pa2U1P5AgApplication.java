@@ -16,8 +16,25 @@ import com.uce.edu.transferencia.service.ITransferenciaService;
 @SpringBootApplication
 public class Pa2U1P5AgApplication implements CommandLineRunner {
 	
-	@Autowired
+	//
+	@Autowired 
 	private ITransferenciaService iTransferenciaService;
+	
+	/*Inyeccion de dependencias por construcor 
+	 * 
+ private ITransferenciaService iTransferenciaService;
+	@Autowired
+	public Pa2U1P5AgApplication(ITransferenciaService iTransServi) {
+		this.iTransferenciaService=iTransServi;
+	}*/
+	
+	/*Inyeccion de dependencias por metodo
+	private ITransferenciaService iTransferenciaService;
+	@Autowired
+	public void setiTransferenciaService(ITransferenciaService iTransferenciaService) {
+		this.iTransferenciaService = iTransferenciaService;
+	}*/
+	
 	@Autowired
 	private ICuentaBancariaService bancariaService;
 	
@@ -40,6 +57,12 @@ public class Pa2U1P5AgApplication implements CommandLineRunner {
 		cuentaDestino.setSaldo(new BigDecimal(200));
 		this.bancariaService.guardar(cuentaDestino);
 		
+		CuentaBancaria cuentaDeposito= new CuentaBancaria();
+		cuentaDeposito.setCedulaPropietario("1712281193");
+		cuentaDeposito.setNumero("5678");
+		cuentaDeposito.setSaldo(new BigDecimal(80));
+		this.bancariaService.guardar(cuentaDeposito);
+		
 
 		this.iTransferenciaService.realizar("1234","1263" , new BigDecimal(20));
 		
@@ -60,9 +83,9 @@ public class Pa2U1P5AgApplication implements CommandLineRunner {
 			indice++;
 			System.out.println("N° Transferencia: "+indice+": "+trans.toString());	
 		}
-		
-		this.bancariaService.deposito("1234", new BigDecimal(50));
-		System.out.println(cuentaDestino);
+		System.out.println(cuentaDeposito);
+		this.bancariaService.deposito("5678", new BigDecimal(50));
+		System.out.println(cuentaDeposito);
 		
 	}
 }
