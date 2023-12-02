@@ -8,6 +8,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.uce.edu.inventario.repository.IProductoRepository;
+import com.uce.edu.inventario.repository.modelo.Bodega;
+import com.uce.edu.inventario.repository.modelo.Inventario;
+import com.uce.edu.inventario.repository.modelo.Producto;
+import com.uce.edu.inventario.service.IBodegaService;
+import com.uce.edu.inventario.service.IInventarioService;
+import com.uce.edu.inventario.service.IProductoService;
 import com.uce.edu.transferencia.repository.modelo.CuentaBancaria;
 import com.uce.edu.transferencia.repository.modelo.Transferencia;
 import com.uce.edu.transferencia.service.ICuentaBancariaService;
@@ -18,25 +25,12 @@ public class Pa2U1P5AgApplication implements CommandLineRunner {
 	
 	//
 	@Autowired 
-	private ITransferenciaService iTransferenciaService;
-	
-	/*Inyeccion de dependencias por construcor 
-	 * 
- private ITransferenciaService iTransferenciaService;
+	private IProductoService productoService;
 	@Autowired
-	public Pa2U1P5AgApplication(ITransferenciaService iTransServi) {
-		this.iTransferenciaService=iTransServi;
-	}*/
-	
-	/*Inyeccion de dependencias por metodo
-	private ITransferenciaService iTransferenciaService;
+	private IBodegaService bodegaService;
 	@Autowired
-	public void setiTransferenciaService(ITransferenciaService iTransferenciaService) {
-		this.iTransferenciaService = iTransferenciaService;
-	}*/
+	private IInventarioService inventarioService;
 	
-	@Autowired
-	private ICuentaBancariaService bancariaService;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(Pa2U1P5AgApplication.class, args);
@@ -44,48 +38,32 @@ public class Pa2U1P5AgApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		//1 Crear cuenta
-		CuentaBancaria cuentaOrigen= new CuentaBancaria();
-		cuentaOrigen.setCedulaPropietario("1727450296");
-		cuentaOrigen.setNumero("1234");
-		cuentaOrigen.setSaldo(new BigDecimal(100));
-		this.bancariaService.guardar(cuentaOrigen);
 		
-		CuentaBancaria cuentaDestino= new CuentaBancaria();
-		cuentaDestino.setCedulaPropietario("1714224415");
-		cuentaDestino.setNumero("1263");
-		cuentaDestino.setSaldo(new BigDecimal(200));
-		this.bancariaService.guardar(cuentaDestino);
-		
-		CuentaBancaria cuentaDeposito= new CuentaBancaria();
-		cuentaDeposito.setCedulaPropietario("1712281193");
-		cuentaDeposito.setNumero("5678");
-		cuentaDeposito.setSaldo(new BigDecimal(80));
-		this.bancariaService.guardar(cuentaDeposito);
-		
+		Producto p1=new Producto();
+		p1.setCodigoBarras("123456");
+		p1.setNombre("HP 15 Laptop");
+		p1.setStock(0);
+		this.productoService.guardar(p1);
 
-		this.iTransferenciaService.realizar("1234","1263" , new BigDecimal(20));
-		
-		CuentaBancaria cuentaOrigen1 = this.bancariaService.buscar("1234");
-		System.out.println(cuentaOrigen1);
-		
-		CuentaBancaria cuentaDestino1= this.bancariaService.buscar("1263");
-		System.out.println(cuentaDestino1);
-		
-		this.iTransferenciaService.realizar("1234", "1263", new BigDecimal(50));
-		this.iTransferenciaService.realizar("1263", "1234", new BigDecimal(10));
+		Producto p2=new Producto();
+		p2.setCodigoBarras("45685");
+		p2.setNombre("Teclado HP");
+		p2.setStock(0);
+		this.productoService.guardar(p2);
 		
 		
-		//Construir un reporte del estado de cuenta de todas las transferecnias 
-		int indice=0;
-		List<Transferencia>lista=this.iTransferenciaService.movimientosBancarios();
-		for (Transferencia trans:lista) {
-			indice++;
-			System.out.println("N° Transferencia: "+indice+": "+trans.toString());	
-		}
-		System.out.println(cuentaDeposito);
-		this.bancariaService.deposito("5678", new BigDecimal(50));
-		System.out.println(cuentaDeposito);
+		Bodega b1 = new Bodega();
+		b1.setCapacidad(300);
+		b1.setCodigo("12345");
+		b1.setNombre("Bodega 1");
+		b1.setDireccion("America");
+		this.bodegaService.guardar(b1);
 		
+		this.inventarioService.registrar(b1.getCodigo(), p1.getCodigoBarras(), 50);
+		this.inventarioService.registrar(b1.getCodigo(), p2.getCodigoBarras(), 100);
+		this.inventarioService.registrar(b1.getCodigo(), p1.getCodigoBarras(), 20);
+		
+		System.out.println(this.productoService.buscar("123456"));
+		System.out.println(this.productoService.buscar("45685"));
 	}
 }
